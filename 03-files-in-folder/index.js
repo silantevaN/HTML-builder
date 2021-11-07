@@ -7,13 +7,13 @@ fs.readdir((filePath), (err, files) => {
   for (let file of files) {
       let fileName = file.split('.')[0];
       let fileExtname = path.extname(file).split('.')[1];
-      var pathFile = filePath + "/" + file;
+      let pathFile = filePath + "/" + file;
       fs.stat(pathFile, (error, stats) => {
         if (error) {
           console.log(error);
         }
         else if (stats.isFile()) {
-          console.log(fileName + ' - ' +  fileExtname + ' - ' + stats.size + 'B');
+          console.log(fileName + ' - ' +  fileExtname + ' - ' + stats.size + 'b');
         }
       });
   };

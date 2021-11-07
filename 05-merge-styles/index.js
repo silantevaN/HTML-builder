@@ -8,7 +8,6 @@ fs.readdir((pathFolder), (err, files) => {
   if (err) throw err;
   for (let file of files) {
     const input = fs.createReadStream(path.join(pathFolder, file), 'utf-8');
-    const output = fs.createWriteStream(pathBundleFile);
     let css = path.extname(file);
     var pathFile = pathFolder + "/" + file;
     fs.stat(pathFile, (error, stats) => {
