@@ -3,7 +3,7 @@ const path = require('path');
 
 const filePath = path.resolve('02-write-file', 'text.txt');
 const streamWriteConsole = fs.createWriteStream(filePath);
-const readline = require('readline');
+
 
 const { stdin, stdout } = require('process');
 

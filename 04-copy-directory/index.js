@@ -6,7 +6,7 @@ const pathCurrentFolder = path.join(__dirname, 'files');
 const pathCopiedFolder = path.join(__dirname, 'files-copy');
 
 
-function listObjects(pathFolder){
+function copyFolder(pathFolder){
 
   fs.readdir(pathFolder, (err, files) => {
 
@@ -15,7 +15,7 @@ function listObjects(pathFolder){
 
       fs.unlink(pathCopiedFolder + '/' + file, function(err) {
         if (err) throw err;
-        listObjects(pathCopiedFolder);
+        copyFolder(pathCopiedFolder);
         fs.readdir((pathCurrentFolder), (err, files) => {
           if (err) throw err;
           files.forEach(file => {
@@ -44,7 +44,7 @@ fs.access(pathCopiedFolder, (err) => {
     });
  });
  } 
- listObjects(pathCopiedFolder);
+ copyFolder(pathCopiedFolder);
 });
 
 
