@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const pathProjectDist = path.join(__dirname, 'project-dist')
+const pathProjectDist = path.join(__dirname, 'project-dist');
 const pathComponents = path.join(__dirname, 'components');
 const pathTemplate = path.join(__dirname, 'template.html');
 const streamIndexHtml = path.join(pathProjectDist, 'index.html');
@@ -11,6 +11,7 @@ const pathStyleCss = path.join(pathProjectDist, 'style.css');
 
 const pathCurrentAssets = path.join(__dirname, 'assets');
 const pathCopiedAssets = path.join(pathProjectDist, 'assets');
+
 
 fs.access(pathProjectDist, (err) => {
   if (err) {
@@ -43,7 +44,7 @@ fs.access(pathProjectDist, (err) => {
         });  
       });
     });
-  })
+  });
 }
 });
 
