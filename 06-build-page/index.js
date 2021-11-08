@@ -7,7 +7,7 @@ const pathTemplate = path.join(__dirname, 'template.html');
 const streamIndexHtml = path.join(pathProjectDist, 'index.html');
 
 const pathFolderStyle = path.join(__dirname, 'styles');
-const pathStyleCss = path.join(pathProjectDist, 'style.css')
+const pathStyleCss = path.join(pathProjectDist, 'style.css');
 
 fs.access(pathProjectDist, (err) => {
   if (err) {
@@ -66,7 +66,7 @@ fs.readdir((pathComponents), (err, components) => {
       });  
     });
   });
-})
+});
 
 fs.readdir((pathFolderStyle), (err, files) => {
   if (err) throw err;
@@ -80,13 +80,14 @@ fs.readdir((pathFolderStyle), (err, files) => {
       }
       else if (stats.isFile() && css === '.css') {
         input.on('data', chunk => {
-          fs.appendFile(pathStyleCss, chunk, (err) => {
+            fs.appendFile(pathStyleCss, chunk, (err) => {
             if (err) {
               console.log(err);
             }});
         });
         input.on('error', error => console.log(error.message));
      }
+
     });
   }
 });
@@ -94,87 +95,85 @@ fs.readdir((pathFolderStyle), (err, files) => {
 const pathCurrentAssets = path.join(__dirname, 'assets');
 const pathCopiedAssets = path.join(pathProjectDist, 'assets');
 
-function copyFolder(pathCurrentAssets) {
-
-  fs.readdir(pathCurrentAssets, (err) => {
-
-     if(err) throw err;
-
-        function filesInFolder(pathCurrentAssets, pathCopiedAssets) {
-
-          fs.readdir((pathCurrentAssets), (err, files) => {
-
-            if (err) throw err;
-              files.forEach(file => {
-              let pathFilesAssets = path.join(pathCurrentAssets, file);
-              let pathCopiedFilesAssets = path.join(pathCopiedAssets, file);
-              fs.rmdir(pathCopiedFilesAssets, { recursive: true }, (err) => {
-                if (err) {
-                    throw err;
-                }
-              fs.stat(pathFilesAssets, (err, stats) => {
-                if (err) throw err; 
-                else if (stats.isDirectory()) {
-                  fs.access(pathCopiedFilesAssets, (err) => {
-                    if (err) {
-                      fs.mkdir(pathCopiedFilesAssets, (err) => {
-                        if (err) { 
-                          console.log(err); 
-                        } 
-                        filesInFolder(pathFilesAssets, pathCopiedFilesAssets)
-                      })
-                    }
-                  })
-                }
-                else if(stats.isFile()) {
-                fs.copyFile(pathFilesAssets, pathCopiedFilesAssets, function(err) {
-                  if (err) throw err;
-                })
-                }
-                });
-              })
-    })  
-    });
-  }
-})
-}
-
 fs.access(pathCopiedAssets, (err) => {
  if (err) {
-  fs.mkdir(pathCopiedAssets,{ recursive: true }, err => {
-    if (err) throw err;
-    console.log('Folder assets copied');
-    function filesInFolder(pathCurrentAssets, pathCopiedAssets) {
-      fs.readdir((pathCurrentAssets), (err, files) => {
-        if (err) throw err;
-        files.forEach(file => {
-          let pathFilesAssets = path.join(pathCurrentAssets, file);
-          let pathCopiedFilesAssets = path.join(pathCopiedAssets, file);
-          fs.stat(pathFilesAssets, (err, stats) => {
-            if (err) throw err; 
-            else if (stats.isDirectory()) {
-              fs.access(pathCopiedFilesAssets, (err) => {
-                if (err) {
-                  fs.mkdir(pathCopiedFilesAssets, (err) => {
-                    if (err) { 
-                      console.log(err); 
-                    } 
-                    filesInFolder(pathFilesAssets, pathCopiedFilesAssets)
-                  })
-                }
+   function copyFolder(pathCopiedAssets) {
+    fs.mkdir(pathCopiedAssets,{ recursive: true }, err => {
+      if (err) throw err;
+      console.log('Folder assets copied');
+      function filesInFolder(pathCurrentAssets, pathCopiedAssets) {
+        fs.readdir((pathCurrentAssets), (err, files) => {
+          if (err) throw err;
+          files.forEach(file => {
+            let pathFilesAssets = path.join(pathCurrentAssets, file);
+            let pathCopiedFilesAssets = path.join(pathCopiedAssets, file);
+            fs.stat(pathFilesAssets, (err, stats) => {
+              if (err) throw err; 
+              else if (stats.isDirectory()) {
+                fs.access(pathCopiedFilesAssets, (err) => {
+                  if (err) {
+                    fs.mkdir(pathCopiedFilesAssets, (err) => {
+                      if (err) { 
+                        console.log(err); 
+                      } 
+                      filesInFolder(pathFilesAssets, pathCopiedFilesAssets)
+                    })
+                  }
+                })
+              }
+              else if(stats.isFile()) {
+              fs.copyFile(pathFilesAssets, pathCopiedFilesAssets, function(err) {
+                if (err) throw err;
               })
-            }
-            else if(stats.isFile()) {
-            fs.copyFile(pathFilesAssets, pathCopiedFilesAssets, function(err) {
-              if (err) throw err;
-            })
-            }
-            });
-        })
-        });  
-    }
-    filesInFolder(pathCurrentAssets, pathCopiedAssets)
- });
+              }
+              });
+          })
+          });  
+      }
+      filesInFolder(pathCurrentAssets, pathCopiedAssets)
+   });
+   }
+   copyFolder(pathCopiedAssets)
  }
- copyFolder(pathCopiedAssets);
 });
+
+function updateFolder(pathCurrentAssets){
+
+  fs.readdir(pathCurrentAssets, (err) => {
+   
+    if(err) throw err;
+        
+         fs.readdir((pathCurrentAssets), (err, files) => {
+           if (err) throw err;
+
+             files.forEach(file => {
+             let pathFilesAssets = path.join(pathCurrentAssets, file);
+             let pathCopiedFilesAssets = path.join(pathCopiedAssets, file);
+             fs.rmdir(pathCopiedFilesAssets, { recursive: true , force: true }, (err) => {
+              if (err) {
+                  throw err;
+              }
+             fs.stat(pathFilesAssets, (err, stats) => {
+               if (err) throw err; 
+               else if (stats.isDirectory()) {
+                 fs.access(pathCopiedFilesAssets, (err) => {
+                   if (err) {
+                       fs.mkdir(pathCopiedFilesAssets, (err) => {
+                         if (err) { 
+                           console.log(err); 
+                         } 
+                       })
+                   }
+                 })
+               }
+               else if(stats.isFile()) {
+               fs.unlink(pathCopiedFilesAssets, function(err) {
+                 if (err) throw err;
+               })
+               }
+               });
+         })                
+        })
+ })
+})
+}
